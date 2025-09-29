@@ -20,9 +20,10 @@ export function VirtualSand() {
     const resizeCanvas = () => {
         canvas.width = parent!.clientWidth;
         canvas.height = 400;
-        ctx.fillStyle = "hsl(var(--secondary))";
+        const resolvedStyle = getComputedStyle(canvas);
+        ctx.fillStyle = resolvedStyle.getPropertyValue('--secondary');
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = "hsl(var(--secondary-foreground))";
+        ctx.strokeStyle = resolvedStyle.getPropertyValue('--secondary-foreground');
         ctx.lineWidth = 4;
         ctx.lineCap = 'round';
     };
@@ -38,17 +39,10 @@ export function VirtualSand() {
   
   const getMousePos = (canvas: HTMLCanvasElement, evt: React.MouseEvent | React.TouchEvent) => {
     const rect = canvas.getBoundingClientRect();
-    if (evt.nativeEvent instanceof MouseEvent) {
-      return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top,
-      };
-    }
-    // Touch event
-    const touch = (evt.nativeEvent as TouchEvent).touches[0];
+    const event = 'touches' in evt.nativeEvent ? evt.nativeEvent.touches[0] : evt;
     return {
-      x: touch.clientX - rect.left,
-      y: touch.clientY - rect.top,
+      x: (event as MouseEvent).clientX - rect.left,
+      y: (event as MouseEvent).clientY - rect.top,
     };
   };
 
@@ -62,6 +56,7 @@ export function VirtualSand() {
 
   const draw = (e: React.MouseEvent | React.TouchEvent) => {
     if (!isDrawing) return;
+    e.preventDefault(); // Prevent scrolling on touch devices
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -69,16 +64,19 @@ export function VirtualSand() {
     
     const pos = getMousePos(canvas, e);
 
-    ctx.beginPath();
-    ctx.moveTo(lastPosition.current!.x, lastPosition.current!.y);
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
+    if (lastPosition.current) {
+        ctx.beginPath();
+        ctx.moveTo(lastPosition.current.x, lastPosition.current.y);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    }
 
     lastPosition.current = pos;
   };
 
   const stopDrawing = () => {
     setIsDrawing(false);
+    lastPosition.current = null;
   };
 
   return (
@@ -91,7 +89,7 @@ export function VirtualSand() {
       onTouchStart={startDrawing}
       onTouchMove={draw}
       onTouchEnd={stopDrawing}
-      className="w-full h-[400px] bg-secondary/30 rounded-lg cursor-pointer"
+      className="w-full h-[400px] bg-secondary rounded-lg cursor-pointer"
     />
   );
 }
