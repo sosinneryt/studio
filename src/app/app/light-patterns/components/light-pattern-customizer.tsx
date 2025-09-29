@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 const patterns = [
   { id: 'pulse', name: 'Pulse' },
@@ -15,10 +16,18 @@ const patterns = [
 ];
 
 const colors = [
-  { id: 'serene', name: 'Serene', from: 'from-primary', via: 'via-accent', to: 'to-blue-300' },
-  { id: 'sunset', name: 'Sunset', from: 'from-yellow-300', via: 'via-red-400', to: 'to-purple-400' },
-  { id: 'forest', name: 'Forest', from: 'from-green-300', via: 'via-teal-400', to: 'to-blue-400' },
+    { id: 'serene', name: 'Serene', from: 'from-primary', via: 'via-accent', to: 'to-blue-300' },
+    { id: 'sunset', name: 'Sunset', from: 'from-yellow-300', via: 'via-red-400', to: 'to-purple-400' },
+    { id: 'forest', name: 'Forest', from: 'from-green-300', via: 'via-teal-400', to: 'to-blue-400' },
+    { id: 'soft-sunset', name: 'Soft Sunset', from: 'from-[#FFD6C0]', via: 'via-[#FFA8A0]', to: 'to-[#FFDEE9]' },
+    { id: 'tranquil-blue', name: 'Tranquil Blue', from: 'from-[#B8E0FF]', via: 'via-[#A2D5C6]', to: 'to-[#C1CEE6]' },
+    { id: 'serene-green', name: 'Serene Green', from: 'from-[#D8E6DF]', via: 'via-[#B5EAD7]', to: 'to-[#C7FFD8]' },
+    { id: 'dreamy-aurora', name: 'Dreamy Aurora', from: 'from-[#C8B8E8]', via: 'via-[#BDE0FE]', to: 'to-[#FFF9CA]' },
+    { id: 'peaceful-ocean', name: 'Peaceful Ocean', from: 'from-[#CFE9DB]', via: 'via-[#AED9E0]', to: 'to-[#BBCDD8]' },
+    { id: 'misty-pastels', name: 'Misty Pastels', from: 'from-[#FFD3E2]', via: 'via-[#D7E3FC]', to: 'to-[#D5F0FF]' },
+    { id: 'zen-garden', name: 'Zen Garden', from: 'from-[#D1E2C4]', via: 'via-[#FAE3D9]', to: 'to-[#BFD8D4]' },
 ];
+
 
 export function LightPatternCustomizer() {
   const [pattern, setPattern] = useState(patterns[0].id);
@@ -97,21 +106,24 @@ export function LightPatternCustomizer() {
 
           <div>
             <Label>Color Palette</Label>
-            <div className="mt-2 grid grid-cols-3 gap-2">
-              {colors.map(c => (
-                <button
-                  key={c.id}
-                  onClick={() => setColor(c)}
-                  className={cn(
-                    "h-14 rounded-md border-2 transition-all",
-                    c.id === color.id ? 'border-ring' : 'border-transparent',
-                  )}
-                >
-                  <div className={cn("w-full h-full rounded bg-gradient-to-br", c.from, c.to)} />
-                  <span className="sr-only">{c.name}</span>
-                </button>
-              ))}
-            </div>
+            <ScrollArea className="w-full whitespace-nowrap rounded-md">
+              <div className="flex w-max space-x-2 p-2">
+                {colors.map(c => (
+                  <button
+                    key={c.id}
+                    onClick={() => setColor(c)}
+                    className={cn(
+                      "h-14 w-14 flex-shrink-0 rounded-md border-2 transition-all",
+                      c.id === color.id ? 'border-ring' : 'border-transparent',
+                    )}
+                  >
+                    <div className={cn("w-full h-full rounded bg-gradient-to-br", c.from, c.via, c.to)} />
+                    <span className="sr-only">{c.name}</span>
+                  </button>
+                ))}
+              </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
           </div>
         </CardContent>
       </Card>

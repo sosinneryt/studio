@@ -29,6 +29,18 @@
       "description": "A default avatar image.",
       "imageUrl": "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NTkxMDU0Nzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "person portrait"
+    },
+    {
+      "id": "852hz",
+      "description": "Abstract waves of light and sound.",
+      "imageUrl": "https://images.unsplash.com/photo-1682220784379-e0ce4380db64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMGxpZ2h0fGVufDB8fHx8MTc1OTE2NjMxN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract light"
+    },
+    {
+      "id": "om-chant",
+      "description": "A meditating person in a serene environment.",
+      "imageUrl": "https://images.unsplash.com/photo-1755960899429-0b9becb76144?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtZWRpdGF0aW9uJTIwemVufGVufDB8fHx8MTc1OTE3MjIxN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "meditation zen"
     }
   ]
 }

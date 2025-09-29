@@ -8,7 +8,7 @@ export default function BreathingPage() {
         title="Guided Breathing"
         description="Follow the visual guide to regulate your breathing and find calm."
       />
-      <div className="w-full max-w-md aspect-square mt-8">
+      <div className="w-full max-w-md aspect-square mt-2">
         <BreathingExercise />
       </div>
     </div>
