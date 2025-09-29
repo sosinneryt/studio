@@ -41,6 +41,24 @@
       "description": "A meditating person in a serene environment.",
       "imageUrl": "https://images.unsplash.com/photo-1755960899429-0b9becb76144?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtZWRpdGF0aW9uJTIwemVufGVufDB8fHx8MTc1OTE3MjIxN3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "meditation zen"
+    },
+    {
+      "id": "escape-beach",
+      "description": "A tranquil beach scene with calm turquoise water and white sand.",
+      "imageUrl": "https://images.unsplash.com/photo-1473187983305-f61533995874?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx0cmFucXVpbCUyMGJlYWNofGVufDB8fHx8MTc2MDIxNTQyNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "tranquil beach"
+    },
+    {
+      "id": "escape-forest",
+      "description": "A peaceful forest with tall trees and soft light filtering through the leaves.",
+      "imageUrl": "https://images.unsplash.com/photo-1448375240586-882707db888b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZWFjZWZ1bCUyMGZvcmVzdHxlbnwwfHx8fDE3NjAyMTU0ODN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "peaceful forest"
+    },
+    {
+      "id": "escape-night-sky",
+      "description": "A clear night sky full of stars over a calm landscape.",
+      "imageUrl": "https://images.unsplash.com/photo-1488866022504-f2584929ca5f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtaWxreSUyMHdheSUyMG5pZ2h0JTIwc2t5fGVufDB8fHx8MTc2MDIxNTUxNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "night sky"
     }
   ]
 }

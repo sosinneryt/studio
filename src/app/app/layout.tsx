@@ -12,6 +12,7 @@ import {
   User,
   PanelLeft,
   Gamepad2,
+  Mountain,
 } from "lucide-react";
 import {
   Sidebar,
@@ -36,6 +37,7 @@ const menuItems = [
   { href: "/app/light-patterns", label: "Light Patterns", icon: Lightbulb },
   { href: "/app/sensory-toys", label: "Sensory Toys", icon: ToyBrick },
   { href: "/app/games", label: "Games", icon: Gamepad2 },
+  { href: "/app/virtual-escapes", label: "Virtual Escapes", icon: Mountain },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
