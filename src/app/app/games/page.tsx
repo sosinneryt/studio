@@ -1,5 +1,7 @@
+
 import { PageHeader } from "@/components/page-header";
 import { BubblePop } from "./components/bubble-pop";
+import { ColorMatch } from "./components/color-match";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 export default function StressReliefGamesPage() {
@@ -17,6 +19,15 @@ export default function StressReliefGamesPage() {
           </CardHeader>
           <CardContent>
             <BubblePop />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Color Match</CardTitle>
+            <CardDescription>Find all the matching pairs of colors.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ColorMatch />
           </CardContent>
         </Card>
       </div>
