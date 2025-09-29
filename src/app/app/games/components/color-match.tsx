@@ -24,6 +24,7 @@ export function ColorMatch() {
 
   useEffect(() => {
     if (flippedTiles.length === 2) {
+      setMoves(prevMoves => prevMoves + 1);
       const [firstIndex, secondIndex] = flippedTiles;
       const firstTile = tiles[firstIndex];
       const secondTile = tiles[secondIndex];
@@ -43,9 +44,8 @@ export function ColorMatch() {
           setFlippedTiles([]);
         }, 1000);
       }
-      setMoves(moves + 1);
     }
-  }, [flippedTiles, tiles, moves]);
+  }, [flippedTiles, tiles]);
 
   const handleTileClick = (index: number) => {
     if (flippedTiles.length < 2 && !tiles[index].isFlipped) {
