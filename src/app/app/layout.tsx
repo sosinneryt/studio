@@ -11,6 +11,7 @@ import {
   ToyBrick,
   User,
   PanelLeft,
+  Gamepad2,
 } from "lucide-react";
 import {
   Sidebar,
@@ -34,6 +35,7 @@ const menuItems = [
   { href: "/app/soundscapes", label: "Soundscapes", icon: Music },
   { href: "/app/light-patterns", label: "Light Patterns", icon: Lightbulb },
   { href: "/app/sensory-toys", label: "Sensory Toys", icon: ToyBrick },
+  { href: "/app/games", label: "Games", icon: Gamepad2 },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
