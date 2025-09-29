@@ -3,6 +3,7 @@ import { CalmCanvas } from "./components/calm-canvas";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { StressBall } from "./components/stress-ball";
 import { VirtualSand } from "./components/virtual-sand";
+import { BubblePop } from "./components/bubble-pop";
 
 export default function SensoryToysPage() {
   return (
@@ -12,6 +13,15 @@ export default function SensoryToysPage() {
         description="Engage your senses with these simple digital toys."
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+        <Card>
+            <CardHeader>
+                <CardTitle>Bubble Pop</CardTitle>
+                <CardDescription>A strangely satisfying bubble popping experience.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <BubblePop />
+            </CardContent>
+        </Card>
         <Card>
             <CardHeader>
                 <CardTitle>Calm Canvas</CardTitle>
