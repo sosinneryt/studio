@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "gentle-rain",
+      "description": "A close-up of raindrops on a window pane, with a soft, blurred background.",
+      "imageUrl": "https://images.unsplash.com/photo-1511634829096-045a111727eb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxyYWluJTIwd2luZG93fGVufDB8fHx8MTc1OTA3MTA5MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "rain window"
+    },
+    {
+      "id": "ocean-waves",
+      "description": "Gentle ocean waves washing over a sandy beach at sunset.",
+      "imageUrl": "https://images.unsplash.com/photo-1505144808419-1957a94ca61e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxvY2VhbiUyMGJlYWNofGVufDB8fHx8MTc1OTEyOTI0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "ocean beach"
+    },
+    {
+      "id": "forest-ambience",
+      "description": "Sunlight filtering through the canopy of a lush green forest.",
+      "imageUrl": "https://images.unsplash.com/photo-1559477983-c2a46651b6ad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmb3Jlc3QlMjBjYW5vcHl8ZW58MHx8fHwxNzU5MTA3MjI3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "forest canopy"
+    },
+    {
+      "id": "white-noise",
+      "description": "An abstract, soft-focus image of static or a textured white surface.",
+      "imageUrl": "https://images.unsplash.com/photo-1498262257252-c282316270bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxhYnN0cmFjdCUyMHRleHR1cmV8ZW58MHx8fHwxNzU5MTA1MDE0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract texture"
+    },
+    {
+      "id": "profile-avatar",
+      "description": "A default avatar image.",
+      "imageUrl": "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NTkxMDU0Nzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    }
+  ]
 }
