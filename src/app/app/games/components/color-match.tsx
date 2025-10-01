@@ -32,14 +32,14 @@ export function ColorMatch() {
       if (firstTile.color === secondTile.color) {
         // Match
         setTiles(prevTiles => prevTiles.map((tile) => 
-          (tile.id === firstTile.id || tile.id === secondTile.id) ? { ...tile, isMatched: true } : tile
+          (tile.id === firstTile.id || tile.id === secondTile.id) ? { ...tile, isMatched: true, isFlipped: true } : tile
         ));
         setFlippedTiles([]);
       } else {
         // No match
         setTimeout(() => {
-          setTiles(prevTiles => prevTiles.map((tile) =>
-            (!tile.isMatched) ? { ...tile, isFlipped: false } : tile
+          setTiles(prevTiles => prevTiles.map((tile, i) =>
+            (i === firstIndex || i === secondIndex) ? { ...tile, isFlipped: false } : tile
           ));
           setFlippedTiles([]);
         }, 1000);
@@ -49,12 +49,10 @@ export function ColorMatch() {
 
   const handleTileClick = (index: number) => {
     if (flippedTiles.length < 2 && !tiles[index].isFlipped) {
-      const newFlippedTiles = [...flippedTiles, index];
-      setFlippedTiles(newFlippedTiles);
-
       setTiles(prevTiles => prevTiles.map((tile, i) => 
         i === index ? { ...tile, isFlipped: true } : tile
       ));
+      setFlippedTiles(prev => [...prev, index]);
     }
   };
 
@@ -93,9 +91,9 @@ export function ColorMatch() {
                 onClick={() => handleTileClick(index)}
                 disabled={tile.isFlipped || tile.isMatched}
                 className={cn(
-                    "relative w-full h-full tile",
-                    (tile.isFlipped || tile.isMatched) && 'flipped',
-                    tile.isMatched ? 'opacity-50 cursor-default' : 'cursor-pointer'
+                    "relative w-full h-full tile cursor-pointer",
+                    tile.isFlipped && 'flipped',
+                    tile.isMatched && 'cursor-default'
                 )}
             >
                 {/* Front of the card */}
