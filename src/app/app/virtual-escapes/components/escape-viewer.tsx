@@ -21,58 +21,31 @@ export function EscapeViewer() {
   const [volume, setVolume] = useState(0.5);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-
-  // Effect for setting up and changing scenes
-  useEffect(() => {
-    // Cleanup previous audio
-    if (audioRef.current) {
-        audioRef.current.pause();
-    }
-    
-    // Setup new audio
-    const newAudio = new Audio(selectedScene.audioSrc);
-    newAudio.loop = true;
-    audioRef.current = newAudio;
-
-    // Setup new video
-    if (videoRef.current) {
-      videoRef.current.src = selectedScene.videoSrc;
-    }
-    
-    // If it should be playing, play the new sources
-    if (isPlaying) {
-      videoRef.current?.play().catch(console.error);
-      audioRef.current?.play().catch(console.error);
-    }
-    
-    const audio = audioRef.current;
-    
-    // Cleanup on component unmount or scene change
-    return () => {
-      audio?.pause();
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedScene]);
-
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  
   // Effect for handling play/pause state
   useEffect(() => {
+    const video = videoRef.current;
+    const audio = audioRef.current;
+    if (!video || !audio) return;
+
     if (isPlaying) {
-        videoRef.current?.play().catch(console.error);
-        audioRef.current?.play().catch(console.error);
+      video.play().catch(console.error);
+      audio.play().catch(console.error);
     } else {
-        videoRef.current?.pause();
-        audioRef.current?.pause();
+      video.pause();
+      audio.pause();
     }
   }, [isPlaying]);
 
-  // Effect for handling volume and mute
+  // Effect for handling volume and mute on the audio element
   useEffect(() => {
-    if(audioRef.current) {
-        audioRef.current.volume = volume;
-        audioRef.current.muted = isMuted;
+    const audio = audioRef.current;
+    if (audio) {
+        audio.volume = volume;
+        audio.muted = isMuted;
     }
   }, [volume, isMuted])
 
@@ -95,14 +68,17 @@ export function EscapeViewer() {
   }, []);
 
   const handlePlayToggle = () => {
-    setIsPlaying(!isPlaying);
+    setIsPlaying(prev => !prev);
   };
   
   const handleSceneChange = (sceneId: string) => {
     const newScene = scenes.find(s => s.id === sceneId);
     if(newScene) {
       setSelectedScene(newScene);
-      setIsPlaying(true); // Autoplay new scene
+      // Ensure playback starts for the new scene
+      if (!isPlaying) {
+        setIsPlaying(true);
+      }
     }
   };
 
@@ -123,6 +99,14 @@ export function EscapeViewer() {
             autoPlay
             muted // Muted to allow autoplay, audio is handled by the Audio element
             playsInline
+            key={selectedScene.videoSrc} // Add key to force re-render on src change
+        />
+        <audio 
+          ref={audioRef}
+          src={selectedScene.audioSrc}
+          loop
+          autoPlay
+          key={selectedScene.audioSrc} // Add key to force re-render on src change
         />
 
         <div className="absolute inset-0 bg-black/20" />
