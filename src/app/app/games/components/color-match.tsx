@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Check, Lightbulb } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { shuffle } from 'lodash';
 
 const colorPalette = [
@@ -31,15 +31,15 @@ export function ColorMatch() {
 
       if (firstTile.color === secondTile.color) {
         // Match
-        setTiles(prevTiles => prevTiles.map((tile, index) => 
-          (index === firstIndex || index === secondIndex) ? { ...tile, isMatched: true } : tile
+        setTiles(prevTiles => prevTiles.map((tile) => 
+          (tile.id === firstTile.id || tile.id === secondTile.id) ? { ...tile, isMatched: true } : tile
         ));
         setFlippedTiles([]);
       } else {
         // No match
         setTimeout(() => {
-          setTiles(prevTiles => prevTiles.map((tile, index) =>
-            (index === firstIndex || index === secondIndex) ? { ...tile, isFlipped: false } : tile
+          setTiles(prevTiles => prevTiles.map((tile) =>
+            (!tile.isMatched) ? { ...tile, isFlipped: false } : tile
           ));
           setFlippedTiles([]);
         }, 1000);
@@ -49,10 +49,12 @@ export function ColorMatch() {
 
   const handleTileClick = (index: number) => {
     if (flippedTiles.length < 2 && !tiles[index].isFlipped) {
+      const newFlippedTiles = [...flippedTiles, index];
+      setFlippedTiles(newFlippedTiles);
+
       setTiles(prevTiles => prevTiles.map((tile, i) => 
         i === index ? { ...tile, isFlipped: true } : tile
       ));
-      setFlippedTiles([...flippedTiles, index]);
     }
   };
 
@@ -66,23 +68,50 @@ export function ColorMatch() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="grid grid-cols-4 gap-3 p-4 bg-primary/10 rounded-lg">
+       <style jsx>{`
+        .tile-container {
+          perspective: 1000px;
+        }
+        .tile {
+          transform-style: preserve-3d;
+          transition: transform 0.6s;
+        }
+        .tile.flipped {
+          transform: rotateY(180deg);
+        }
+        .tile-face {
+          backface-visibility: hidden;
+        }
+        .tile-back {
+          transform: rotateY(180deg);
+        }
+      `}</style>
+      <div className="grid grid-cols-4 gap-3">
         {tiles.map((tile, index) => (
-          <button
-            key={tile.id}
-            onClick={() => handleTileClick(index)}
-            disabled={tile.isFlipped || tile.isMatched}
-            className={cn(
-              "w-12 h-12 rounded-lg transition-all duration-300 transform-gpu",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
-              (tile.isFlipped || tile.isMatched) ? 'rotate-y-180' : '',
-              tile.isMatched ? 'opacity-50 cursor-default' : 'cursor-pointer'
-            )}
-            style={{ transformStyle: 'preserve-3d' }}
-          >
-            <div className={cn("absolute w-full h-full backface-hidden rounded-lg", tile.isFlipped || tile.isMatched ? 'z-10' : 'z-20')}
-                 style={{ backgroundColor: (tile.isFlipped || tile.isMatched) ? tile.color : 'hsl(var(--secondary))' }}/>
-          </button>
+          <div key={tile.id} className="w-12 h-12 tile-container">
+            <button
+                onClick={() => handleTileClick(index)}
+                disabled={tile.isFlipped || tile.isMatched}
+                className={cn(
+                    "relative w-full h-full tile",
+                    (tile.isFlipped || tile.isMatched) && 'flipped',
+                    tile.isMatched ? 'opacity-50 cursor-default' : 'cursor-pointer'
+                )}
+            >
+                {/* Front of the card */}
+                <div 
+                    className={cn(
+                        "absolute w-full h-full rounded-lg tile-face",
+                        "bg-secondary"
+                    )}
+                />
+                {/* Back of the card */}
+                <div
+                    className={cn("absolute w-full h-full rounded-lg tile-face tile-back")}
+                    style={{ backgroundColor: tile.color }}
+                />
+            </button>
+          </div>
         ))}
       </div>
       
@@ -101,11 +130,6 @@ export function ColorMatch() {
       <Button onClick={resetGame} variant="outline" className="mt-4">
         Reset Game
       </Button>
-
-      <style jsx>{`
-        .rotate-y-180 { transform: rotateY(180deg); }
-        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-      `}</style>
     </div>
   );
 }
