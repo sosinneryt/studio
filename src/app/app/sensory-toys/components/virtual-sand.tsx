@@ -1,11 +1,27 @@
 "use client";
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
+import { Button } from '@/components/ui/button';
+import { RotateCcw } from 'lucide-react';
 
 export function VirtualSand() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const lastPosition = useRef<{ x: number; y: number } | null>(null);
+
+  const clearCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resolvedStyle = getComputedStyle(document.documentElement);
+    const background = resolvedStyle.getPropertyValue('--secondary').trim();
+    
+    ctx.fillStyle = `hsl(${background})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }, []);
+
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -21,11 +37,10 @@ export function VirtualSand() {
         canvas.width = parent!.clientWidth;
         canvas.height = 400;
         const resolvedStyle = getComputedStyle(document.documentElement);
-        const background = resolvedStyle.getPropertyValue('--secondary').trim();
         const foreground = resolvedStyle.getPropertyValue('--secondary-foreground').trim();
         
-        ctx.fillStyle = `hsl(${background})`;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        clearCanvas();
+        
         ctx.strokeStyle = `hsl(${foreground})`;
         ctx.lineWidth = 4;
         ctx.lineCap = 'round';
@@ -38,7 +53,7 @@ export function VirtualSand() {
         window.removeEventListener('resize', resizeCanvas);
     };
 
-  }, []);
+  }, [clearCanvas]);
   
   const getMousePos = (canvas: HTMLCanvasElement, evt: React.MouseEvent | React.TouchEvent) => {
     const rect = canvas.getBoundingClientRect();
@@ -83,16 +98,22 @@ export function VirtualSand() {
   };
 
   return (
-    <canvas
-      ref={canvasRef}
-      onMouseDown={startDrawing}
-      onMouseMove={draw}
-      onMouseUp={stopDrawing}
-      onMouseOut={stopDrawing}
-      onTouchStart={startDrawing}
-      onTouchMove={draw}
-      onTouchEnd={stopDrawing}
-      className="w-full h-[400px] bg-secondary rounded-lg cursor-pointer"
-    />
+    <div className="flex flex-col items-center">
+        <canvas
+            ref={canvasRef}
+            onMouseDown={startDrawing}
+            onMouseMove={draw}
+            onMouseUp={stopDrawing}
+            onMouseOut={stopDrawing}
+            onTouchStart={startDrawing}
+            onTouchMove={draw}
+            onTouchEnd={stopDrawing}
+            className="w-full h-[400px] bg-secondary rounded-lg cursor-pointer"
+        />
+        <Button onClick={clearCanvas} variant="outline" className="mt-4">
+            <RotateCcw className="mr-2 h-4 w-4" />
+            Clear
+        </Button>
+    </div>
   );
 }

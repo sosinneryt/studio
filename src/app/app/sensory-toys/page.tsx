@@ -11,7 +11,7 @@ export default function SensoryToysPage() {
         title="Interactive Sensory Toys"
         description="Engage your senses with these simple digital toys."
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
         <Card>
             <CardHeader>
                 <CardTitle>Calm Canvas</CardTitle>
@@ -30,7 +30,7 @@ export default function SensoryToysPage() {
                 <StressBall />
             </CardContent>
         </Card>
-        <Card>
+        <Card className="md:col-span-2 lg:col-span-1">
             <CardHeader>
                 <CardTitle>Virtual Sand</CardTitle>
                 <CardDescription>Drag your finger or mouse to draw in the sand.</CardDescription>
