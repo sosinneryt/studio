@@ -13,6 +13,8 @@ const chartData = [
   { activity: "Soundscapes", time: 25, fill: "var(--color-soundscapes)" },
   { activity: "Light", time: 12, fill: "var(--color-light)" },
   { activity: "Toys", time: 30, fill: "var(--color-toys)" },
+  { activity: "Games", time: 22, fill: "var(--color-games)" },
+  { activity: "Escapes", time: 15, fill: "var(--color-escapes)" },
 ];
 
 const chartConfig = {
@@ -34,6 +36,14 @@ const chartConfig = {
   toys: {
     label: "Sensory Toys",
     color: "hsl(var(--chart-4))",
+  },
+  games: {
+    label: "Games",
+    color: "hsl(var(--chart-5))",
+  },
+  escapes: {
+    label: "Virtual Escapes",
+    color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
