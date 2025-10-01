@@ -44,8 +44,8 @@ export function EscapeViewer() {
     
     // If it should be playing, play the new sources
     if (isPlaying) {
-      videoRef.current?.play();
-      audioRef.current?.play();
+      videoRef.current?.play().catch(console.error);
+      audioRef.current?.play().catch(console.error);
     }
     
     const audio = audioRef.current;
@@ -54,13 +54,14 @@ export function EscapeViewer() {
     return () => {
       audio?.pause();
     };
-  }, [selectedScene]); // Only run when the scene changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedScene]);
 
   // Effect for handling play/pause state
   useEffect(() => {
     if (isPlaying) {
-        videoRef.current?.play();
-        audioRef.current?.play();
+        videoRef.current?.play().catch(console.error);
+        audioRef.current?.play().catch(console.error);
     } else {
         videoRef.current?.pause();
         audioRef.current?.pause();
