@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useTransition } from 'react';
-import Image from 'next/image';
 import screenfull from 'screenfull';
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -11,9 +9,9 @@ import { Expand, Minimize, Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 
 const scenes = [
-  { id: 'beach', name: 'Peaceful Beach', imageId: 'escape-beach', audioSrc: '/sounds/waves.mp3' },
-  { id: 'forest', name: 'Tranquil Forest', imageId: 'escape-forest', audioSrc: '/sounds/forest.mp3' },
-  { id: 'night-sky', name: 'Starry Night', imageId: 'escape-night-sky', audioSrc: '/sounds/night.mp3' },
+  { id: 'beach', name: 'Peaceful Beach', videoSrc: '/videos/beach.mp4', audioSrc: '/sounds/waves.mp3' },
+  { id: 'forest', name: 'Tranquil Forest', videoSrc: '/videos/forest.mp4', audioSrc: '/sounds/forest.mp3' },
+  { id: 'night-sky', name: 'Starry Night', videoSrc: '/videos/night-sky.mp4', audioSrc: '/sounds/night.mp3' },
 ];
 
 export function EscapeViewer() {
@@ -25,8 +23,10 @@ export function EscapeViewer() {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
+    // Setup the scene audio
     audioRef.current = new Audio(selectedScene.audioSrc);
     audioRef.current.loop = true;
     audioRef.current.volume = volume;
@@ -34,6 +34,13 @@ export function EscapeViewer() {
       audioRef.current.play();
     }
     
+    // Setup video
+    if(videoRef.current) {
+        videoRef.current.src = selectedScene.videoSrc;
+        videoRef.current.load();
+        videoRef.current.play().catch(e => console.error("Video autoplay failed", e));
+    }
+
     const audio = audioRef.current;
 
     return () => {
@@ -94,20 +101,18 @@ export function EscapeViewer() {
     }
   };
 
-  const image = PlaceHolderImages.find(img => img.id === selectedScene.imageId);
-
   return (
     <div ref={containerRef} className={cn("relative w-full transition-all bg-black", isFullscreen ? "fixed inset-0 z-50" : "rounded-lg border aspect-video")}>
-        {image && (
-            <Image
-                src={image.imageUrl}
-                alt={selectedScene.name}
-                fill
-                className="object-cover"
-                data-ai-hint={image.imageHint}
-                priority
-            />
-        )}
+        <video 
+            ref={videoRef}
+            src={selectedScene.videoSrc}
+            className="w-full h-full object-cover"
+            autoPlay
+            loop
+            muted
+            playsInline
+        />
+
         <div className="absolute inset-0 bg-black/20" />
         
         <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between gap-4">
