@@ -4,15 +4,7 @@ import { RecommendationsClient } from "./components/recommendations-client";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SensoryProfileSummary } from "./components/sensory-profile-summary";
-import dynamic from "next/dynamic";
-
-const ProgressChart = dynamic(
-  () => import("./components/progress-chart").then(mod => mod.ProgressChart),
-  {
-    loading: () => <Skeleton className="w-full h-[300px]" />,
-  }
-);
-
+import { ProgressChartClient } from "./components/progress-chart-client";
 
 export default function DashboardPage() {
   return (
@@ -26,7 +18,7 @@ export default function DashboardPage() {
             <div>
               <h2 className="text-2xl font-semibold tracking-tight mb-4">Your Progress</h2>
               <div className="rounded-lg border bg-card p-4">
-                <ProgressChart />
+                <ProgressChartClient />
               </div>
             </div>
              <div>
