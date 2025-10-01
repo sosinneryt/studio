@@ -25,35 +25,58 @@ export function EscapeViewer() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  // Effect for setting up and changing scenes
   useEffect(() => {
-    // Setup the scene audio
+    // Cleanup previous audio
     if (audioRef.current) {
         audioRef.current.pause();
     }
-    audioRef.current = new Audio(selectedScene.audioSrc);
-    audioRef.current.loop = true;
-    audioRef.current.volume = volume;
-    audioRef.current.muted = isMuted;
+    
+    // Setup new audio
+    const newAudio = new Audio(selectedScene.audioSrc);
+    newAudio.loop = true;
+    audioRef.current = newAudio;
 
+    // Setup new video
     if (videoRef.current) {
       videoRef.current.src = selectedScene.videoSrc;
-      if (isPlaying) {
-        videoRef.current.play();
-        if(audioRef.current) audioRef.current.play();
-      }
     }
     
+    // If it should be playing, play the new sources
     if (isPlaying) {
-        if(audioRef.current) audioRef.current.play();
+      videoRef.current?.play();
+      audioRef.current?.play();
     }
-
+    
     const audio = audioRef.current;
     
+    // Cleanup on component unmount or scene change
     return () => {
-      audio.pause();
+      audio?.pause();
     };
-  }, [selectedScene, isPlaying, isMuted, volume]);
+  }, [selectedScene]); // Only run when the scene changes
 
+  // Effect for handling play/pause state
+  useEffect(() => {
+    if (isPlaying) {
+        videoRef.current?.play();
+        audioRef.current?.play();
+    } else {
+        videoRef.current?.pause();
+        audioRef.current?.pause();
+    }
+  }, [isPlaying]);
+
+  // Effect for handling volume and mute
+  useEffect(() => {
+    if(audioRef.current) {
+        audioRef.current.volume = volume;
+        audioRef.current.muted = isMuted;
+    }
+  }, [volume, isMuted])
+
+
+  // Effect for fullscreen changes
   useEffect(() => {
     const handleChange = () => {
       if(screenfull.isEnabled) {
@@ -71,16 +94,7 @@ export function EscapeViewer() {
   }, []);
 
   const handlePlayToggle = () => {
-    if (audioRef.current && videoRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        videoRef.current.pause();
-      } else {
-        audioRef.current.play();
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
+    setIsPlaying(!isPlaying);
   };
   
   const handleSceneChange = (sceneId: string) => {
