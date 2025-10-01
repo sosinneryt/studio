@@ -47,9 +47,12 @@ export function BreathingExercise() {
   const currentBreathingCycle = breathingCycles[cycleType].cycle;
 
   useEffect(() => {
+    const duration = currentBreathingCycle[cycleIndex]?.duration;
+    if (!duration) return;
+
     const interval = setInterval(() => {
       setCycleIndex((prevIndex) => (prevIndex + 1) % currentBreathingCycle.length);
-    }, currentBreathingCycle[cycleIndex].duration);
+    }, duration);
 
     return () => clearInterval(interval);
   }, [cycleIndex, currentBreathingCycle]);
@@ -59,6 +62,11 @@ export function BreathingExercise() {
   }, [cycleType]);
 
   const currentPhase = currentBreathingCycle[cycleIndex];
+  
+  if (!currentPhase) {
+    return null; // Don't render if the phase is not yet defined
+  }
+
   const isHolding = currentPhase.state === 'Hold';
   const isBreathingIn = currentPhase.state === 'Breathe In';
 
