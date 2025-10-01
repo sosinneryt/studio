@@ -30,9 +30,9 @@ export type SensoryProfileInput = z.infer<typeof SensoryProfileInputSchema>;
 // Define the schema for the activity recommendations output
 const ActivityRecommendationsOutputSchema = z.object({
   recommendations: z
-    .string()
+    .array(z.string())
     .describe(
-      'A list of personalized activity recommendations tailored to the user sensory profile and preferred activities.  These activities should be aligned with the core features of the application, such as breathing exercises, soundscapes, light patterns, and sensory toys.'
+      'A list of personalized activity recommendations tailored to the user sensory profile and preferred activities. Each recommendation should be a separate string in the array. These activities should be aligned with the core features of the application, such as breathing exercises, soundscapes, light patterns, and sensory toys.'
     ),
 });
 export type ActivityRecommendationsOutput = z.infer<typeof ActivityRecommendationsOutputSchema>;
@@ -49,7 +49,7 @@ const personalizedActivityPrompt = ai.definePrompt({
   name: 'personalizedActivityPrompt',
   input: {schema: SensoryProfileInputSchema},
   output: {schema: ActivityRecommendationsOutputSchema},
-  prompt: `Based on the following sensory profile and preferred activities, provide a list of personalized activity recommendations that the user might find helpful for relaxation and sensory regulation.
+  prompt: `Based on the following sensory profile and preferred activities, provide a list of personalized activity recommendations that the user might find helpful for relaxation and sensory regulation. Format the output as a list of strings.
 
 Sensory Profile: {{{sensoryPreferences}}}
 Preferred Activities: {{{preferredActivities}}}

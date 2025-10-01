@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 
 export function RecommendationsClient() {
   const { profile, loading: profileLoading } = useSensoryProfile();
-  const [recommendations, setRecommendations] = useState<string | null>(null);
+  const [recommendations, setRecommendations] = useState<string[] | null>(null);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
@@ -68,14 +68,14 @@ export function RecommendationsClient() {
         <CardDescription>Based on your unique sensory profile.</CardDescription>
       </CardHeader>
       <CardContent>
-        {recommendations ? (
-          <div className="prose prose-sm dark:prose-invert max-w-none text-card-foreground">
-            {recommendations.split('\n').map((line, index) => {
-              if (line.startsWith('* ') || line.startsWith('- ')) {
-                return <p key={index} className="flex items-start"><span className="mr-2 mt-1">✨</span><span>{line.substring(2)}</span></p>
-              }
-              return <p key={index}>{line}</p>
-            })}
+        {recommendations && recommendations.length > 0 ? (
+          <div className="space-y-3">
+            {recommendations.map((rec, index) => (
+              <p key={index} className="flex items-start text-sm">
+                <span className="mr-3 mt-1 text-primary">✨</span>
+                <span>{rec}</span>
+              </p>
+            ))}
           </div>
         ) : (
           <p>No recommendations available at the moment.</p>
