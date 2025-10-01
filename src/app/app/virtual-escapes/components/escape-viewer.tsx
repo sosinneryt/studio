@@ -129,6 +129,7 @@ export function EscapeViewer() {
               src={videoUrl}
               className="w-full h-full object-cover"
               loop
+              autoPlay
               playsInline
               onCanPlay={() => {
                 if (isPlaying && videoRef.current) {
