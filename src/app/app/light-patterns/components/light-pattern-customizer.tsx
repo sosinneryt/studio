@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -8,6 +8,8 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Expand, Minimize } from 'lucide-react';
+import screenfull from 'screenfull';
 
 const patterns = [
   { id: 'pulse', name: 'Pulse' },
@@ -33,6 +35,30 @@ export function LightPatternCustomizer() {
   const [pattern, setPattern] = useState(patterns[0].id);
   const [speed, setSpeed] = useState(10); // in seconds
   const [color, setColor] = useState(colors[0]);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const fullscreenRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleChange = () => {
+      if(screenfull.isEnabled) {
+        setIsFullscreen(screenfull.isFullscreen);
+      }
+    };
+    if (screenfull.isEnabled) {
+      screenfull.on('change', handleChange);
+    }
+    return () => {
+      if (screenfull.isEnabled) {
+        screenfull.off('change', handleChange);
+      }
+    };
+  }, []);
+
+  const handleFullscreenToggle = () => {
+    if (screenfull.isEnabled && fullscreenRef.current) {
+      screenfull.toggle(fullscreenRef.current);
+    }
+  };
 
   const animationClass = {
     pulse: 'animate-[pulse_10s_ease-in-out_infinite]',
@@ -54,27 +80,33 @@ export function LightPatternCustomizer() {
   `;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className={cn("grid grid-cols-1 gap-8", !isFullscreen && "lg:grid-cols-3")}>
       <style>{keyframes}</style>
-      <Card className="lg:col-span-2">
-        <CardContent className="p-0">
-          <div
-            className={cn(
-              "w-full h-96 rounded-lg bg-gradient-to-br transition-all duration-1000",
-              color.from, color.via, color.to,
-              pattern === 'aurora' ? 'bg-[size:400%_400%]' : ''
-            )}
-            style={{ 
-              animationName: pattern === 'aurora' ? 'aurora' : (pattern === 'pulse' ? 'pulse' : 'fadeInOut'),
-              animationDuration: `${speed}s`,
-              animationTimingFunction: 'ease-in-out',
-              animationIterationCount: 'infinite'
-             }}
-          />
-        </CardContent>
-      </Card>
+      <div ref={fullscreenRef} className={cn("relative", !isFullscreen && "lg:col-span-2")}>
+        <Card className={cn(isFullscreen ? "fixed inset-0 z-50 rounded-none border-none" : "w-full")}>
+            <CardContent className="p-0">
+            <div
+                className={cn(
+                "w-full bg-gradient-to-br transition-all duration-1000",
+                color.from, color.via, color.to,
+                pattern === 'aurora' ? 'bg-[size:400%_400%]' : '',
+                isFullscreen ? "h-screen w-screen" : "h-96 rounded-lg"
+                )}
+                style={{ 
+                animationName: pattern === 'aurora' ? 'aurora' : (pattern === 'pulse' ? 'pulse' : 'fadeInOut'),
+                animationDuration: `${speed}s`,
+                animationTimingFunction: 'ease-in-out',
+                animationIterationCount: 'infinite'
+                }}
+            />
+            </CardContent>
+        </Card>
+        <Button size="icon" variant="secondary" onClick={handleFullscreenToggle} className="absolute top-3 right-3 z-50">
+            {isFullscreen ? <Minimize /> : <Expand />}
+        </Button>
+      </div>
 
-      <Card>
+      <Card className={cn(isFullscreen && "hidden")}>
         <CardHeader>
           <CardTitle>Customize</CardTitle>
         </CardHeader>
