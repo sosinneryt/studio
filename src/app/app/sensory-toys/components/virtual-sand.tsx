@@ -20,10 +20,13 @@ export function VirtualSand() {
     const resizeCanvas = () => {
         canvas.width = parent!.clientWidth;
         canvas.height = 400;
-        const resolvedStyle = getComputedStyle(canvas);
-        ctx.fillStyle = resolvedStyle.getPropertyValue('--secondary');
+        const resolvedStyle = getComputedStyle(document.documentElement);
+        const background = resolvedStyle.getPropertyValue('--secondary').trim();
+        const foreground = resolvedStyle.getPropertyValue('--secondary-foreground').trim();
+        
+        ctx.fillStyle = `hsl(${background})`;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = resolvedStyle.getPropertyValue('--secondary-foreground');
+        ctx.strokeStyle = `hsl(${foreground})`;
         ctx.lineWidth = 4;
         ctx.lineCap = 'round';
     };
