@@ -4,6 +4,7 @@ import { ProgressChart } from "./components/progress-chart";
 import { RecommendationsClient } from "./components/recommendations-client";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SensoryProfileSummary } from "./components/sensory-profile-summary";
 
 export default function DashboardPage() {
   return (
@@ -13,11 +14,19 @@ export default function DashboardPage() {
         description="Here's a look at your recent activity and some suggestions for you."
       />
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <h2 className="text-2xl font-semibold tracking-tight mb-4">Your Progress</h2>
-          <div className="rounded-lg border bg-card p-4">
-            <ProgressChart />
-          </div>
+        <div className="lg:col-span-2 space-y-8">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight mb-4">Your Progress</h2>
+              <div className="rounded-lg border bg-card p-4">
+                <ProgressChart />
+              </div>
+            </div>
+             <div>
+              <h2 className="text-2xl font-semibold tracking-tight mb-4">Your Profile</h2>
+               <Suspense fallback={<Skeleton className="h-48 w-full" />}>
+                <SensoryProfileSummary />
+              </Suspense>
+            </div>
         </div>
         <div className="lg:col-span-1">
           <h2 className="text-2xl font-semibold tracking-tight mb-4">For You</h2>

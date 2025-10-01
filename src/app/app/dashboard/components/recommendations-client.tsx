@@ -16,7 +16,7 @@ export function RecommendationsClient() {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (profile) {
+    if (profile?.text) {
       startTransition(async () => {
         const preferredActivities = profile.preferences?.preferredActivities?.join(", ") || "relaxing";
         const result = await getRecommendationsAction(profile.text, preferredActivities);
@@ -33,23 +33,23 @@ export function RecommendationsClient() {
     }
   }, [profile, toast]);
 
-  if (profileLoading || isPending) {
+  if (profileLoading) {
     return (
       <Card className="flex flex-col items-center justify-center h-64">
         <Loader className="h-8 w-8 animate-spin text-muted-foreground" />
-        <p className="mt-4 text-muted-foreground">Generating recommendations...</p>
+        <p className="mt-4 text-muted-foreground">Loading recommendations...</p>
       </Card>
     );
   }
 
-  if (!profile) {
+  if (!profile?.text) {
     return (
       <Card className="flex flex-col items-center justify-center text-center h-64 p-6">
         <CardHeader>
           <Wand2 className="h-10 w-10 mx-auto text-primary" />
-          <CardTitle className="mt-4">Unlock Personalized Recommendations</CardTitle>
+          <CardTitle className="mt-4">Create a Profile First</CardTitle>
           <CardDescription>
-            Complete your sensory profile to get activities tailored just for you.
+            Complete your sensory profile to unlock personalized AI suggestions.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -68,7 +68,11 @@ export function RecommendationsClient() {
         <CardDescription>Based on your unique sensory profile.</CardDescription>
       </CardHeader>
       <CardContent>
-        {recommendations && recommendations.length > 0 ? (
+        {isPending ? (
+           <div className="flex items-center justify-center h-32">
+             <Loader className="h-6 w-6 animate-spin text-muted-foreground" />
+           </div>
+        ) : recommendations && recommendations.length > 0 ? (
           <div className="space-y-3">
             {recommendations.map((rec, index) => (
               <p key={index} className="flex items-start text-sm">
