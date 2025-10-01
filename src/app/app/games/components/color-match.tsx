@@ -18,9 +18,14 @@ const generateTiles = () => {
 };
 
 export function ColorMatch() {
-  const [tiles, setTiles] = useState(generateTiles());
+  const [tiles, setTiles] = useState<ReturnType<typeof generateTiles>>([]);
   const [flippedTiles, setFlippedTiles] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
+
+  useEffect(() => {
+    // Generate tiles on the client side to avoid hydration mismatch
+    setTiles(generateTiles());
+  }, []);
 
   useEffect(() => {
     if (flippedTiles.length === 2) {
@@ -62,7 +67,7 @@ export function ColorMatch() {
     setMoves(0);
   };
   
-  const allMatched = tiles.every(tile => tile.isMatched);
+  const allMatched = tiles.length > 0 && tiles.every(tile => tile.isMatched);
 
   return (
     <div className="flex flex-col items-center">
