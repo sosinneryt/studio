@@ -1,10 +1,19 @@
 import { PageHeader } from "@/components/page-header";
 import { Separator } from "@/components/ui/separator";
-import { ProgressChart } from "./components/progress-chart";
 import { RecommendationsClient } from "./components/recommendations-client";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SensoryProfileSummary } from "./components/sensory-profile-summary";
+import dynamic from "next/dynamic";
+
+const ProgressChart = dynamic(
+  () => import("./components/progress-chart").then(mod => mod.ProgressChart),
+  {
+    loading: () => <Skeleton className="w-full h-[300px]" />,
+    ssr: false,
+  }
+);
+
 
 export default function DashboardPage() {
   return (
