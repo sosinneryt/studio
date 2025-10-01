@@ -10,7 +10,6 @@ const ProgressChart = dynamic(
   () => import("./components/progress-chart").then(mod => mod.ProgressChart),
   {
     loading: () => <Skeleton className="w-full h-[300px]" />,
-    ssr: false,
   }
 );
 
