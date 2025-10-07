@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
@@ -20,10 +21,12 @@ export function EscapeViewer() {
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showControls, setShowControls] = useState(true);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Effect for handling play/pause state
   useEffect(() => {
@@ -49,6 +52,23 @@ export function EscapeViewer() {
     }
   }, [volume, isMuted])
 
+  // Effect to auto-hide controls
+  useEffect(() => {
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
+    }
+    if (showControls && isPlaying) {
+      controlsTimeoutRef.current = setTimeout(() => {
+        setShowControls(false);
+      }, 3000);
+    }
+    return () => {
+      if (controlsTimeoutRef.current) {
+        clearTimeout(controlsTimeoutRef.current);
+      }
+    };
+  }, [showControls, isPlaying]);
+
 
   // Effect for fullscreen changes
   useEffect(() => {
@@ -69,12 +89,14 @@ export function EscapeViewer() {
 
   const handlePlayToggle = () => {
     setIsPlaying(prev => !prev);
+    setShowControls(true);
   };
   
   const handleSceneChange = (sceneId: string) => {
     const newScene = scenes.find(s => s.id === sceneId);
     if(newScene) {
       setSelectedScene(newScene);
+      setShowControls(true);
       // Ensure playback starts for the new scene
       if (!isPlaying) {
         setIsPlaying(true);
@@ -86,11 +108,20 @@ export function EscapeViewer() {
     if (screenfull.isEnabled && containerRef.current) {
       screenfull.toggle(containerRef.current);
     }
+    setShowControls(true);
   };
+
+  const handleContainerClick = () => {
+    setShowControls(prev => !prev);
+  }
 
 
   return (
-    <div ref={containerRef} className={cn("relative w-full transition-all bg-black", isFullscreen ? "fixed inset-0 z-50" : "rounded-lg border aspect-video")}>
+    <div 
+      ref={containerRef} 
+      className={cn("relative w-full transition-all bg-black cursor-pointer", isFullscreen ? "fixed inset-0 z-50" : "rounded-lg border aspect-video")}
+      onClick={handleContainerClick}
+    >
         <video 
             ref={videoRef}
             src={selectedScene.videoSrc}
@@ -111,7 +142,10 @@ export function EscapeViewer() {
 
         <div className="absolute inset-0 bg-black/20" />
         
-        <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between gap-4">
+        <div 
+          className={cn("absolute top-4 left-4 right-4 z-10 flex items-center justify-between gap-4 transition-opacity duration-300", showControls ? "opacity-100" : "opacity-0 pointer-events-none")}
+          onClick={(e) => e.stopPropagation()} // Prevent click from bubbling to container
+        >
             <Select value={selectedScene.id} onValueChange={handleSceneChange}>
                 <SelectTrigger className="w-[200px] bg-background/70 backdrop-blur-sm">
                     <SelectValue placeholder="Select a scene" />
@@ -130,7 +164,10 @@ export function EscapeViewer() {
             </div>
         </div>
 
-        <div className="absolute bottom-4 left-4 right-4 z-10 flex items-center justify-center gap-4 rounded-lg bg-background/70 p-2 backdrop-blur-sm">
+        <div 
+          className={cn("absolute bottom-4 left-4 right-4 z-10 flex items-center justify-center gap-4 rounded-lg bg-background/70 p-2 backdrop-blur-sm transition-opacity duration-300", showControls ? "opacity-100" : "opacity-0 pointer-events-none")}
+          onClick={(e) => e.stopPropagation()} // Prevent click from bubbling to container
+        >
             <Button size="icon" variant="ghost" onClick={handlePlayToggle}>
                 {isPlaying ? <Pause /> : <Play />}
             </Button>
