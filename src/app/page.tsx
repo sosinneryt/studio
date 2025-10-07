@@ -47,7 +47,6 @@ export default function WelcomePage() {
                 alt={welcomeImage.description}
                 fill
                 className="object-cover"
-                priority
                 data-ai-hint={welcomeImage.imageHint}
             />
         )}
