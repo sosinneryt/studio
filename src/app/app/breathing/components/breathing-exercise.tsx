@@ -88,14 +88,14 @@ export function BreathingExercise() {
       <div className="relative w-full h-full flex items-center justify-center">
         <div
           className={cn(
-            'absolute rounded-full bg-primary/20 transition-transform duration-[3000ms] ease-in-out',
+            'absolute rounded-full bg-primary/20 transition-transform ease-in-out',
             isBreathingIn || isHolding ? 'scale-100' : 'scale-50'
           )}
           style={{ width: '100%', height: '100%', transitionDuration: `${currentPhase.duration}ms` }}
         />
         <div
           className={cn(
-            'absolute rounded-full bg-primary/40 transition-transform duration-[3000ms] ease-in-out',
+            'absolute rounded-full bg-primary/40 transition-transform ease-in-out',
             isBreathingIn || isHolding ? 'scale-75' : 'scale-25'
           )}
           style={{ width: '100%', height: '100%', transitionDuration: `${currentPhase.duration}ms` }}
