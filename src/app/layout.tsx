@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
