@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export', // CRITICAL: This allows the app to run inside the APK
+  output: 'export', // Required for APK: converts the app to static HTML/JS/CSS
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    unoptimized: true, // CRITICAL: Static exports don't support Next.js Image Optimization
+    unoptimized: true, // Required for APK: standard Image Optimization needs a server
     remotePatterns: [
       {
         protocol: 'https',
@@ -31,13 +31,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '2mb',
-      // Increase timeout for slow video generation
-      // serverActionsTimeout: 120, // Note: Server actions may not work in a static APK
-    },
-  },
+  /* EXPERIMENTAL BLOCK REMOVED: 
+     Server Actions and bodySizeLimits are not supported in static exports/APKs.
+  */
 };
 
 export default nextConfig;
