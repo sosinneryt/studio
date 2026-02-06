@@ -27,7 +27,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { generateProfileAction } from "@/app/actions";
 import { useSensoryProfile } from "@/hooks/use-sensory-profile";
 import { sensoryProfileSchema } from "@/lib/schemas";
 import { Loader, Wand2 } from "lucide-react";
@@ -55,7 +54,7 @@ export function SensoryProfileForm() {
 
   const form = useForm<z.infer<typeof sensoryProfileSchema>>({
     resolver: zodResolver(sensoryProfileSchema),
-    defaultValues: {
+    defaultValues: profile?.preferences || {
       lightSensitivity: 5,
       soundSensitivity: 5,
       calmingSounds: ["rain"],
@@ -66,21 +65,14 @@ export function SensoryProfileForm() {
   });
 
   function onSubmit(values: z.infer<typeof sensoryProfileSchema>) {
-    startTransition(async () => {
-      const result = await generateProfileAction(values);
-      if (result.success) {
-        saveProfile({ text: result.data, preferences: values });
-        toast({
-          title: "Profile Generated!",
-          description: "Your sensory profile has been successfully created.",
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Generation Failed",
-          description: result.error,
-        });
-      }
+    startTransition(() => {
+      // For the APK build, we just save the preferences locally without AI generation.
+      const profileText = `Your preferences have been saved. You can edit them at any time. This is a placeholder as AI profile generation is not available in the mobile app.`;
+      saveProfile({ text: profileText, preferences: values });
+      toast({
+        title: "Profile Saved!",
+        description: "Your sensory preferences have been saved to your device.",
+      });
     });
   }
 
@@ -98,10 +90,10 @@ export function SensoryProfileForm() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Wand2 className="text-primary" />
-            Your AI-Generated Profile
+            Your Sensory Profile
           </CardTitle>
           <CardDescription>
-            This profile helps us personalize your experience. You can update it anytime.
+            These are your saved preferences. You can update them anytime.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -110,7 +102,10 @@ export function SensoryProfileForm() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button onClick={() => clearProfile()} variant="outline">
+          <Button onClick={() => {
+            clearProfile();
+            form.reset();
+            }} variant="outline">
             Create a New Profile
           </Button>
         </CardFooter>
@@ -299,7 +294,7 @@ export function SensoryProfileForm() {
           <CardFooter>
             <Button type="submit" disabled={isPending}>
               {isPending && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-              Generate My Profile
+              Save My Preferences
             </Button>
           </CardFooter>
         </Card>

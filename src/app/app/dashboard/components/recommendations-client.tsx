@@ -1,43 +1,19 @@
 "use client";
 
-import { getRecommendationsAction } from "@/app/actions";
 import { useSensoryProfile } from "@/hooks/use-sensory-profile";
-import { useEffect, useState, useTransition } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Loader, Wand2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 
 export function RecommendationsClient() {
   const { profile, loading: profileLoading } = useSensoryProfile();
-  const [recommendations, setRecommendations] = useState<string[] | null>(null);
-  const [isPending, startTransition] = useTransition();
-  const { toast } = useToast();
-
-  useEffect(() => {
-    if (profile?.text) {
-      startTransition(async () => {
-        const preferredActivities = profile.preferences?.preferredActivities?.join(", ") || "relaxing";
-        const result = await getRecommendationsAction(profile.text, preferredActivities);
-        if (result.success) {
-          setRecommendations(result.data);
-        } else {
-          toast({
-            variant: "destructive",
-            title: "Recommendation Error",
-            description: result.error,
-          });
-        }
-      });
-    }
-  }, [profile, toast]);
 
   if (profileLoading) {
     return (
       <Card className="flex flex-col items-center justify-center h-64">
         <Loader className="h-8 w-8 animate-spin text-muted-foreground" />
-        <p className="mt-4 text-muted-foreground">Loading recommendations...</p>
+        <p className="mt-4 text-muted-foreground">Loading...</p>
       </Card>
     );
   }
@@ -68,22 +44,9 @@ export function RecommendationsClient() {
         <CardDescription>Based on your unique sensory profile.</CardDescription>
       </CardHeader>
       <CardContent>
-        {isPending ? (
-           <div className="flex items-center justify-center h-32">
-             <Loader className="h-6 w-6 animate-spin text-muted-foreground" />
-           </div>
-        ) : recommendations && recommendations.length > 0 ? (
-          <div className="space-y-3">
-            {recommendations.map((rec, index) => (
-              <p key={index} className="flex items-start text-sm">
-                <span className="mr-3 mt-1 text-primary">✨</span>
-                <span>{rec}</span>
-              </p>
-            ))}
-          </div>
-        ) : (
-          <p>No recommendations available at the moment.</p>
-        )}
+        <p className="text-sm text-muted-foreground">
+            AI-powered recommendations are not available in the mobile app version. Please use the web version for this feature.
+        </p>
       </CardContent>
     </Card>
   );
