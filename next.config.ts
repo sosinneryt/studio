@@ -1,7 +1,7 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'export', // CRITICAL: This allows the app to run inside the APK
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    unoptimized: true, // CRITICAL: Static exports don't support Next.js Image Optimization
     remotePatterns: [
       {
         protocol: 'https',
@@ -34,7 +35,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: '2mb',
       // Increase timeout for slow video generation
-      serverActionsTimeout: 120,
+      // serverActionsTimeout: 120, // Note: Server actions may not work in a static APK
     },
   },
 };
