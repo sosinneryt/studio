@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export', // Required for APK: converts the app to static HTML/JS/CSS
+  output: 'export', // Required for APK
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -9,31 +9,14 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    unoptimized: true, // Required for APK: standard Image Optimization needs a server
+    unoptimized: true, // Required for APK
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
+      { protocol: 'https', hostname: 'placehold.co', pathname: '/**' },
+      { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
+      { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
     ],
   },
-  /* EXPERIMENTAL BLOCK REMOVED: 
-     Server Actions and bodySizeLimits are not supported in static exports/APKs.
-  */
+  // Experimental block removed entirely to fix the "Server Actions" error
 };
 
 export default nextConfig;
