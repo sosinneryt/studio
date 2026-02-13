@@ -1,7 +1,9 @@
 import type { NextConfig } from 'next';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const nextConfig: NextConfig = {
-  output: 'export', // Required for APK
+  output: isProd ? 'export' : undefined, // Conditionally set for APK build
   typescript: {
     ignoreBuildErrors: true,
   },
